@@ -1,5 +1,5 @@
 # Modifiche apportate: 
-# - sostituzione del metodo "timesleep" con "putCompliting"
+# - sostituzione del metodo "timesleep" con "putCompliting" (Completato)
 # - nuovo stato iniziale per il settaggio dei motori e il controllo delle connessioni del PV
 # - il metodo per l'homing viene eseguito solo se necessario tutte le altre movimentazioni vengono esguite con .relative (anche per giri completi)
 
@@ -1294,179 +1294,304 @@ class IRIS_FSM(fsmBase):
 
 # s6 : Carica "Central Movement", Motore: m5 , Attuatore: "lock1" 
 
-# Scarica 1^ Target - - - - - - - - - - - - - - - - - - - - - ciao
+# Gestione interfaccia 
     def Discharge_Central_state_entry(self):
-        self.state_6.put(1)
-        self.logI("\t> - - - Discharging Central Movement - - - < \n")
-        time.sleep(1)        
-        self.lock1_extract.put(1)                                                     # Estrae Solenoid_Bottom (1)
-        self.m5_relative.put(self.i2*self.discharge_d1)                               # 1^ Movimentazione: Scarica primo Target
-        self.tmrSet('moveTimeout26', 40)                                              # Set a timer of 30s
-        self.logI("\tStarting Central movement")   
+        self.state_6.put(1)      
+        self.tmrSet('moveTimeout26_1', 10)                                              
 
     def Discharge_Central_state_eval(self):
+        if self.state_6.putCompleting():      
+            self.gotoState("Extract_lock1_1") 
 
-        if self.m5_done_moving.rising():      
-            self.gotoState("solenoid_bottom_1") 
-
-        elif self.tmrExpiring("moveTimeout26"):                                       # Timer expired event
+        elif self.tmrExpiring("moveTimeout26_1"):                                 
             self.state_6.put(4)
-            self.logI("\t<  - - - !! ERROR: Central movement : during 1^ movement - - -  >\n")
             self.gotoState("idle_error")  
 
     def  Discharge_Central_state_exit(self):
          pass      
-# Insert solenoid bottom, lock1
-    def solenoid_bottom_1_entry(self):
-        time.sleep(1)        
-        self.m5_relative.put(-32*self.corr2)                                          # Correzione posizione per insert solenaoid bottom
-        self.tmrSet('moveTimeout27', 40)                                              # Set a timer of 30s
+
+# Estrazzione attuatore "lock1"
+    def Extract_lock1_1_entry(self):
+        self.lock1_extract.put(1)                                                     # Estrae Solenoid_Bottom (1)      
+        self.tmrSet('moveTimeout26_2', 10)                                             
+
+    def Extract_lock1_1_eval(self):
+        if self.lock1_extract.putCompleting():      
+            self.gotoState("Discharge_Central_state1") 
+
+        elif self.tmrExpiring("moveTimeout26_2"):                                 
+            self.state_6.put(4)
+            self.gotoState("idle_error")  
+
+    def  Extract_lock1_1_exit(self):
+         pass   
+
+# Scarica 1^ Target - - - - - - - - - - - - - - - - - - - - - 
+
+# Movimentazione motore
+    def Discharge_Central_state1_entry(self):
+        self.logI("\t> - - - Discharging Central Movement - - - < ")
+        self.m5_relative.put(self.i2*self.discharge_d1)                               # 1^ Movimentazione: Scarica primo Target
+        self.tmrSet('moveTimeout26_3', 30)                                              # Set a timer of 30s
         self.logI("\tStarting Central movement")   
 
-    def solenoid_bottom_1_eval(self):
+    def Discharge_Central_state1_eval(self):
+        if self.m5_done_moving.rising():      
+            self.gotoState("Discharge_Central_correction1") 
 
-        if self.m5_done_moving.rising():          
-            self.logI("\t  1^ - Target out \n")
-            time.sleep(1)
-            self.lock1_insert.put(1)                                                 # "Disinserisce" Solenoid_Bottom (1)
-            self.gotoState("Discharge_Central_state2") 
-  
-        elif self.tmrExpiring("moveTimeout27"):                                      # Timer expired event
+        elif self.tmrExpiring("moveTimeout26_3"):                                       # Timer expired event
             self.state_6.put(4)
-            self.logI("\t<  - - - !! ERROR: Central movement : during 1^ movement - - -  >\n")
+            self.logI("\t<  - - - !! ERROR: Central movement : during 1^ movement - - -  >")
+            self.gotoState("idle_error")  
+
+    def  Discharge_Central_state1_exit(self):
+         pass      
+
+# Correzzione passi
+    def Discharge_Central_correction1_entry(self):
+        self.m5_relative.put(self.corr_i2*self.corr2)                                # Correzione posizione per insert solenaoid bottom                      
+        self.tmrSet('moveTimeout26', 40)                                              
+        self.logI("\tStarting Central movement")   
+
+    def Discharge_Central_correction1_eval(self):
+        if self.m5_done_moving.rising():      
+            self.gotoState("solenoid_bottom_1") 
+
+        elif self.tmrExpiring("moveTimeout26"):                                      
+            self.state_6.put(4)
+            self.logI("\t<  - - - !! ERROR: Central movement : during 1^ correction movement - - -  >")
+            self.gotoState("idle_error")  
+
+    def  Discharge_Central_correction1_exit(self):
+         pass      
+
+# Insert solenoid bottom, lock1
+    def solenoid_bottom_1_entry(self):   
+        self.lock1_insert.put(1)                                                      # "Disinserisce" Solenoid_Bottom (1)                                    
+        self.tmrSet('moveTimeout27', 10)                                              
+
+    def solenoid_bottom_1_eval(self):
+        if self.lock1_insert.putCompleting():          
+            self.gotoState("Extract_lock1_2") 
+  
+        elif self.tmrExpiring("moveTimeout27"):                                      
+            self.state_6.put(4)
             self.gotoState("idle_error")  
 
     def  solenoid_bottom_1_exit(self):
          pass  
 
+
 # Scarica 2^ Target - - - - - - - - - - - - - - - - - - - - -
+
+# Estrazione attuatore "lock1"
+    def Extract_lock1_2_entry(self):
+        self.lock1_extract.put(1)                                                     # Estrae Solenoid_Bottom (2)      
+        self.tmrSet('moveTimeout28_2', 10)                                             
+
+    def Extract_lock1_2_eval(self):
+        if self.lock1_extract.putCompleting():      
+            self.gotoState("Discharge_Central_state2") 
+
+        elif self.tmrExpiring("moveTimeout28_2"):                                 
+            self.state_6.put(4)
+            self.gotoState("idle_error")  
+
+    def  Extract_lock1_2_exit(self):
+         pass   
+
+# Movementazione motore - scarica 2^ Target
     def Discharge_Central_state2_entry(self):       
-        time.sleep(1)
-        self.lock1_extract.put(1)                                                     # Estrae Solenoid_Bottom (2)
         self.m5_relative.put(self.i2*self.discharge_d2)                               # 2^ Movimentazione: Scarica secondo Target
         self.tmrSet('moveTimeout28', 30)                                              # Set a timer of 30s
         self.logI("\tStarting Central movement")   
 
     def Discharge_Central_state2_eval(self):
-
         if self.m5_done_moving.rising():          
-            self.logI("\t  2^ - Target out \n")
-            time.sleep(1)                               
-            self.gotoState("solenoid_bottom_2") 
+            self.logI("\t  2^ - Target out \n")                             
+            self.gotoState("Discharge_Central_correction2") 
  
         elif self.tmrExpiring("moveTimeout28"):                                       # Timer expired event
             self.state_6.put(4)
-            self.logI("\n<  - - - !! ERROR: Central movement : during 2^ movement - - -  >\n")
+            self.logI("\n<  - - - !! ERROR: Central movement : during 2^ movement - - -  >")
             self.gotoState("idle_error")  
 
     def  Discharge_Central_state2_exit(self):
          pass
-# Correction Discharge movement 2, lock1
-    def solenoid_bottom_2_entry(self):       
-        time.sleep(1)                                                                 # Estrae Solenoid_Bottom (2)
-        self.m5_relative.put(-32*self.corr2) 
-        self.tmrSet('moveTimeout29', 30)                                              # Set a timer of 30s
+
+# Correzzione passi
+    def Discharge_Central_correction2_entry(self):
+        self.m5_relative.put(self.corr_i2*self.corr2)                                # Correzione posizione per insert solenaoid bottom                      
+        self.tmrSet('moveTimeout28_1', 30)                                              
         self.logI("\tStarting Central movement")   
 
-    def solenoid_bottom_2_eval(self):
+    def Discharge_Central_correction2_eval(self):
+        if self.m5_done_moving.rising():      
+            self.gotoState("solenoid_bottom_2") 
 
-        if self.m5_done_moving.rising():          
-            time.sleep(1)
-            self.lock1_insert.put(1)                                                  # "Disinserisce" Solenoid_Bottom (2)
-            self.gotoState("Discharge_Central_state3") 
- 
-        elif self.tmrExpiring("moveTimeout29"):                                       # Timer expired event
+        elif self.tmrExpiring("moveTimeout28_1"):                                      
             self.state_6.put(4)
-            self.logI("\t<  - - - !! ERROR: Central movement : during 2^ movement - - -  >\n")
+            self.logI("\t<  - - - !! ERROR: Central movement : during 1^ correction movement - - -  >")
+            self.gotoState("idle_error")  
+
+    def  Discharge_Central_correction2_exit(self):
+         pass      
+
+# Insert solenoid bottom, lock1
+    def solenoid_bottom_2_entry(self):   
+        self.lock1_insert.put(1)                                                     # "Disinserisce" Solenoid_Bottom (2)                                    
+        self.tmrSet('moveTimeout28_4', 10)                                              
+
+    def solenoid_bottom_2_eval(self):
+        if self.lock1_insert.putCompleting():          
+            self.gotoState("Extract_lock1_3") 
+  
+        elif self.tmrExpiring("moveTimeout28_4"):                                      
+            self.state_6.put(4)
             self.gotoState("idle_error")  
 
     def  solenoid_bottom_2_exit(self):
-         pass
+         pass  
+
 
 # Scarica 3^ Target - - - - - - - - - - - - - - - - - - - - -
+
+# Estrazione attuatore "lock1"
+    def Extract_lock1_3_entry(self):
+        self.lock1_extract.put(1)                                                     # Estrae Solenoid_Bottom (3)      
+        self.tmrSet('moveTimeout29_1', 10)                                             
+
+    def Extract_lock1_3_eval(self):
+        if self.lock1_extract.putCompleting():      
+            self.gotoState("Discharge_Central_state3") 
+
+        elif self.tmrExpiring("moveTimeout29_1"):                                 
+            self.state_6.put(4)
+            self.gotoState("idle_error")  
+
+    def  Extract_lock1_3_exit(self):
+         pass   
+
+# Movimentazione motore 
     def Discharge_Central_state3_entry(self):      
-        time.sleep(1)
-        self.lock1_extract.put(1)                                                     # Estrae Solenoid_Bottom (3)
-        self.m5_relative.put(self.i2*self.discharge_d3)                               # 3^ Movimentazione: Scarica terzo Target
-        self.tmrSet('moveTimeout30', 30)                                              # Set a timer of 30s
+        self.m5_relative.put(self.i2*self.discharge_d3)                              # 3^ Movimentazione: Scarica terzo Target
+        self.tmrSet('moveTimeout30', 30)                                              
         self.logI("\tStarting Central movement")   
 
     def Discharge_Central_state3_eval(self):
-
         if self.m5_done_moving.rising():          
-            self.logI("\n3^ - Target out \n")
-            time.sleep(1)                                                             # "Disinserisce" Solenoid_Bottom (3)
-            self.gotoState("solenoid_bottom_3")                              
+            self.logI("\t3^ - Target out")
+            self.gotoState("Discharge_Central_correction3")                              
 
-        elif self.tmrExpiring("moveTimeout30"):                                       # Timer expired event
+        elif self.tmrExpiring("moveTimeout30"):                                     
             self.state_6.put(4)
-            self.logI("\t<  - - - !! ERROR: Central movement : during 3^ movement - - -  >\n")
+            self.logI("\t<  - - - !! ERROR: Central movement : during 3^ movement - - -  >")
             self.gotoState("idle_error")  
 
     def  Discharge_Central_state3_exit(self):
          pass
-# Correction Discharge movement 3, lock1
-    def solenoid_bottom_3_entry(self):       
-        time.sleep(1)                                                                 # Estrae Solenoid_Bottom (2)
-        self.m5_relative.put(-32*self.corr2) 
-        self.tmrSet('moveTimeout31', 30)                                              # Set a timer of 30s
+
+# Correzzione passi
+    def Discharge_Central_correction3_entry(self):
+        self.m5_relative.put(self.corr_i2*self.corr2)                                 # Correzione posizione per insert solenaoid bottom                      
+        self.tmrSet('moveTimeout30_1', 30)                                              
         self.logI("\tStarting Central movement")   
 
-    def solenoid_bottom_3_eval(self):
-
+    def Discharge_Central_correction3_eval(self):
         if self.m5_done_moving.rising():      
-            time.sleep(1)
-            self.lock1_insert.put(1)                                                  # "Disinserisce" Solenoid_Bottom (2)
-                        
-            self.s6 = 1                                                               # Sesto stato completato
-            self.state_6.put(2)
-            self.gotoState("idle_state")    
- 
-        elif self.tmrExpiring("moveTimeout31"):                                       # Timer expired event
+            self.gotoState("solenoid_bottom_3") 
+
+        elif self.tmrExpiring("moveTimeout30_1"):                                      
             self.state_6.put(4)
-            self.logI("\t<  - - - !! ERROR: Central movement : during 2^ movement - - -  >\n")
+            self.logI("\t<  - - - !! ERROR: Central movement : during 1^ correction movement - - -  >")
+            self.gotoState("idle_error")  
+
+    def  Discharge_Central_correction3_exit(self):
+         pass      
+
+# Correction Discharge movement 3, lock1
+    def solenoid_bottom_3_entry(self):       
+        self.lock1_insert.put(1)                                                        # "Disinserisce" Solenoid_Bottom (2)
+        self.tmrSet('moveTimeout31', 30)                                                # Set a timer of 30s
+
+    def solenoid_bottom_3_eval(self):
+        if self.lock1_insert.putCompleting():                  
+            self.s6 = 1                                                                 # Sesto stato completato
+            self.state_6.put(2)
+            self.gotoState("final_discharge_state")    
+ 
+        elif self.tmrExpiring("moveTimeout31"):                                         # Timer expired event
+            self.state_6.put(4)
+            self.logI("\t<  - - - !! ERROR: Central movement : during 2^ movement - - -  >")
             self.gotoState("idle_error")  
 
     def  solenoid_bottom_3_exit(self):
          pass
+
+# Stato finale - segnalazione interfaccia
+    def final_discharge_state_entry(self):       
+        self.state_6.put(2)                                                             # "Disinserisce" Solenoid_Bottom (2)
+        self.tmrSet('moveTimeout31_1', 10)                                              
+
+    def final_discharge_state_eval(self):
+        if self.state_6.putCompleting():                                                                 
+            self.gotoState("idle_state")    
+ 
+        elif self.tmrExpiring("moveTimeout31_1"):                                       
+            self.state_6.put(4)
+            self.gotoState("idle_error")  
+
+    def  final_discharge_state_exit(self):
+         self.s6 = 1                                                                      # Sesto stato completato
+
 ################################################################################
 #                           Discharge_Buffer_State                                      
 ################################################################################   
 
 # s7: Carica e Scarica del "Discharge_Buffer", Motore: m4
 
-# Carica "Discharge_Buffer" - - - - - - - - - - - - - - - - - - - - -
+# Segnalazione interfaccia stato 7
     def Discharge_Buffer_State_entry(self):
-        time.sleep(1)
         self.state_7.put(1)
-        self.m4_reverse.put(1)                                                       # Carica dei 3 Target con un giro completo
-
-        self.tmrSet('moveTimeout32', 50)                                             # Set a timer of 50s
-        self.logI("\tStarting Discharge Buffer movement")
+        self.tmrSet('moveTimeout32', 10)                                     
 
     def Discharge_Buffer_State_eval(self):
-
-        if self.m4_done_moving.rising():            
-            self.logI("\t> \"  Discharge_Buffer \" Charged <\n")
+        if self.state_7.putCompleting():            
             self.gotoState("Discharge_Buffer_State2")
 
-        elif self.tmrExpiring("moveTimeout32"):                                      # Timer expired event
+        elif self.tmrExpiring("moveTimeout32"):                                     
             self.state_7.put(4)
-            self.logI("\t<  - - - !! ERROR: Discharge Buffer movement - - -  >\n")
             self.gotoState("idle_error")  
 
     def  Discharge_Buffer_State_exit(self):
          pass 
+
+# Carica "Discharge_Buffer" - - - - - - - - - - - - - - - - - - - - -
+    def Discharge_Buffer_State_entry(self):
+        self.m4_reverse.put(1)                                                       # Carica dei 3 Target con un giro completo
+        self.tmrSet('moveTimeout32', 30)                                             
+        self.logI("\tStarting Discharge Buffer movement")
+
+    def Discharge_Buffer_State_eval(self):
+        if self.m4_done_moving.rising():            
+            self.logI("\t> \"  Discharge_Buffer \" Charged <")
+            self.gotoState("Discharge_Buffer_State2")
+
+        elif self.tmrExpiring("moveTimeout32"):                                   
+            self.state_7.put(4)
+            self.logI("\t<  - - - !! ERROR: Discharge Buffer movement - - -  >")
+            self.gotoState("idle_error")  
+
+    def  Discharge_Buffer_State_exit(self):
+         pass 
+    
 # Scarica1 "Discharge_Buffer" - - - - - - - - - - - - - - - - - - - - -
     def Discharge_Buffer_State2_entry(self):
         self.m4_home.put(1)                                                          # Scarica dei 3 Target con un giro completo (mediante homing)
-
-
-        self.tmrSet('moveTimeout33', 50)                                             # Set a timer of 50s
+        self.tmrSet('moveTimeout33', 30)                                            
         self.logI("\tStarting Discharge Buffer movement")
 
     def Discharge_Buffer_State2_eval(self):
-
         if self.m4_done_moving.rising():            
             self.gotoState("Discharge_Buffer_State3")
 
@@ -1477,24 +1602,24 @@ class IRIS_FSM(fsmBase):
 
     def  Discharge_Buffer_State2_exit(self):
          pass
+    
 # Scarica2 "Discharge_Buffer" - - - - - - - - - - - - - - - - - - - - -
     def Discharge_Buffer_State3_entry(self):
         self.m4_reverse.put(1)                                                       # Scarica dei 3 Target con un giro completo (mediante homing)
-
-        self.tmrSet('moveTimeout34', 50)                                             # Set a timer of 50s
+        self.tmrSet('moveTimeout34', 30)                                             # Set a timer of 50s
         self.logI("\nStarting Discharge Buffer movement")
 
     def Discharge_Buffer_State3_eval(self):
 
         if self.m4_done_moving.rising():            
-            self.logI("\t> - !\"  Discharge_Buffer \"  Discharged ! - <\n")
+            self.logI("\t> - !\"  Discharge_Buffer \"  Discharged ! - <")
             self.s7 = 1                                                              # Settimo stato completato
             self.state_7.put(2)
             self.gotoState("idle_state")
 
         elif self.tmrExpiring("moveTimeout34"):                                      # Timer expired event
             self.state_7.put(4)
-            self.logI("\t<  - - - !! ERROR: Charge Buffer movement - - -  >\n")
+            self.logI("\t<  - - - !! ERROR: Charge Buffer movement - - -  >")
             self.gotoState("idle_error")  
 
     def  Discharge_Buffer_State3_exit(self):
@@ -1503,3 +1628,4 @@ class IRIS_FSM(fsmBase):
         else:                      # se dispari
            self.bufferpos.put(0)
         
+# committed
