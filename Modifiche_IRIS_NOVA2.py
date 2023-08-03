@@ -1294,7 +1294,7 @@ class IRIS_FSM(fsmBase):
 
 # s6 : Carica "Central Movement", Motore: m5 , Attuatore: "lock1" 
 
-# Scarica 1^ Target - - - - - - - - - - - - - - - - - - - - -
+# Scarica 1^ Target - - - - - - - - - - - - - - - - - - - - - ciao
     def Discharge_Central_state_entry(self):
         self.state_6.put(1)
         self.logI("\t> - - - Discharging Central Movement - - - < \n")
