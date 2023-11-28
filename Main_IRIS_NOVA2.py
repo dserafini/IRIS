@@ -1,7 +1,8 @@
 from smlib import loader
 
 #from "NOME_FILE" import "NOME_CLASSE"
-from prova_IRIS_NOVA2 import IRIS_FSM
+from Modifiche_IRIS_NOVA2 import IRIS_FSM
+#from  Recovery_Iris import RECOVERY_IRIS_FSM
 
 
 def main():
@@ -11,6 +12,7 @@ def main():
 
     #l.load("NOME_CLASSE", "Nome_casuale")
     l.load(IRIS_FSM,"IRIS_FSM")
+    #l.load(RECOVERY_IRIS_FSM,"RECOVERY_IRIS_FSM")
 
 
     # start execution

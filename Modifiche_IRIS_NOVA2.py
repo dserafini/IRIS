@@ -8,15 +8,15 @@ class IRIS_FSM(fsmBase):
 
         
         # ALIGNMENT - - - - - - - - - - - - - - - - - - - - - - - -
-        # Charge_Slider position
-        self.exact_charge_slider_steps = 6592
-        self.exact_discharge_slider_steps = -6336+64
+        # Charge_Slider positions
+        self.exact_charge_slider_steps = 6656     # 6592+64
+        self.exact_discharge_slider_steps = -6720 # -6336+64
         self.exact_longitudinal_axis_steps = 128
 
         # Charge_Central_Movement position
         self.exact_1_charge_central_steps = 8064  # 7872
-        self.exact_2_charge_central_steps = 16640 # +64    # 16320 
-        self.exact_3_charge_central_steps = 24960 # +64    # 24768
+        self.exact_2_charge_central_steps = 16704 # 16640
+        self.exact_3_charge_central_steps = 24960 
 
         # Discharge Central Movement position
         self.exact_1_discharge_central_steps = 4096
