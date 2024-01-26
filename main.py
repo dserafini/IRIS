@@ -11,7 +11,7 @@ from chargebuffer import chargebuffer_fsm
 # load the fsms
 l = loader()
 
-l.setVerbosity("debug")
+# l.setVerbosity("debug")
 
 l.load(chargebuffer_fsm,"myexampleFsm")
 # l.load(chargeslider_fsm,"chargeslider_fsm")
