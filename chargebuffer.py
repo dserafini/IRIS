@@ -12,7 +12,7 @@ class chargebuffer_fsm(fsmBase):
         self.m2_speed = self.connect("WhHrdwMtbx54A_Chan02:Motr.S")
         self.m2_min_velocity = self.connect("WhHrdwMtbx54A_Chan02:Motr.VBAS")
 
-        self.home = self.connect("FeExprIris01A_Proc01:home")
+        self.home = self.connect("FeExprIris01A_Proc01:Enab")
 
         self.gotoState('idle')
 
