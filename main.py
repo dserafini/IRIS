@@ -15,12 +15,12 @@ def main():
     l = loader()
 
     l.load(chargebuffer_fsm,"chargebuffer_fsm")
-    l.load(chargeslider_fsm,"chargeslider_fsm")
-    l.load(topactuator_fsm,"topactuator_fsm")
-    l.load(central_fsm,"central_fsm")
-    l.load(bottomactuator_fsm,"bottomactuator_fsm")
-    l.load(dischargeslider_fsm,"dischargeslider_fsm")
-    l.load(dischargebuffer_fsm,"dischargebuffer_fsm")
+    # l.load(chargeslider_fsm,"chargeslider_fsm")
+    # l.load(topactuator_fsm,"topactuator_fsm")
+    # l.load(central_fsm,"central_fsm")
+    # l.load(bottomactuator_fsm,"bottomactuator_fsm")
+    # l.load(dischargeslider_fsm,"dischargeslider_fsm")
+    # l.load(dischargebuffer_fsm,"dischargebuffer_fsm")
 
     # start execution
     l.start()
