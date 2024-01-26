@@ -20,8 +20,7 @@ class chargebuffer_fsm(fsmBase):
 
     # idle state
     def idle_eval(self):
-        if self.enable.rising():
-            self.gotoState("mirroring")
+        self.gotoState("home_forward")
 
     # home forward state
     def home_forward_entry(self):
