@@ -1,6 +1,6 @@
 from smlib import loader
 
-from chargebuffer import chargebuffer_fsm
+from chargebuffer import exampleFsm
 # from chargeslider import chargeslider_fsm
 # from topactuator import topactuator_fsm
 # from central import central_fsm
