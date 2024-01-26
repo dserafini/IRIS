@@ -1,12 +1,12 @@
 from smlib import loader
 
 from chargebuffer import chargebuffer_fsm
-from chargeslider import chargeslider_fsm
-from topactuator import topactuator_fsm
-from central import central_fsm
-from bottomactuator import bottomactuator_fsm
-from dischargeslider import dischargeslider_fsm
-from dischargebuffer import dischargebuffer_fsm
+# from chargeslider import chargeslider_fsm
+# from topactuator import topactuator_fsm
+# from central import central_fsm
+# from bottomactuator import bottomactuator_fsm
+# from dischargeslider import dischargeslider_fsm
+# from dischargebuffer import dischargebuffer_fsm
 
 
 def main():
