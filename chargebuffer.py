@@ -12,15 +12,16 @@ class chargebuffer_fsm(fsmBase):
         self.m2_speed = self.connect("WhHrdwMtbx54A_Chan02:Motr.S")
         self.m2_min_velocity = self.connect("WhHrdwMtbx54A_Chan02:Motr.VBAS")
 
-        self.counter = self.connect("testcounter")
-        self.mirror = self.connect("testmirror")
-        self.enable = self.connect("testenable")
+        self.home = self.connect("FeExprIris01A_Proc01:home")
 
         self.gotoState('idle')
 
     # idle state
     def idle_eval(self):
-        self.gotoState("home_forward")
+        if self.home.rising():
+            self.gotoState("home_forward")
+        if self.home.falling():
+            self.gotoState("home_reverse")
 
     # home forward state
     def home_forward_entry(self):
@@ -29,7 +30,7 @@ class chargebuffer_fsm(fsmBase):
     def home_forward_eval(self):
         if self.m2_done_moving.rising():
             self.logI('charge slider in home forward')
-            self.gotoState('home_reverse')
+            self.gotoState('idle')
             
     def home_forward_exit(self):
         pass
@@ -41,7 +42,7 @@ class chargebuffer_fsm(fsmBase):
     def home_reverse_eval(self):
         if self.m2_done_moving.rising():
             self.logI('charge slider in home reverse')
-            self.gotoState('home_forward')
+            self.gotoState('idle')
             
     def home_reverse_exit(self):
         pass
