@@ -1,8 +1,8 @@
 from smlib import fsmBase
 
-class exampleFsm(fsmBase):
+class chargebuffer_fsm(fsmBase):
     def __init__(self, name, *args, **kwargs):
-        super(exampleFsm, self).__init__(name, **kwargs)
+        super(chargebuffer_fsm, self).__init__(name, **kwargs)
 
         self.m2_relative = self.connect("WhHrdwMtbx54A_Chan02:Motr.RLV")
         self.m2_home_forward = self.connect("WhHrdwMtbx54A_Chan02:Homf.PROC")
