@@ -13,7 +13,7 @@ class chargebuffer_fsm(fsmBase):
     self.m2_min_velocity = self.connect("WhHrdwMtbx54A_Chan02:Motr.VBAS")
     
     # START PROCEDURE
-    self.gotoState('chargebuffer_home_forward')
+    self.gotoState('idle_error')
     
     def chargebuffer_home_forward_entry(self): 
       self.m2_home.put(1)
