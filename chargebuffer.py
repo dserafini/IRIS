@@ -23,10 +23,26 @@ class chargebuffer_fsm(fsmBase):
         if self.enable.rising():
             self.gotoState("mirroring")
 
-    # mirroring state
-    def mirroring_eval(self):
-        if self.enable.falling():
-            self.gotoState("idle")
-        elif self.counter.changing():
-            readValue = self.counter.val()
-            self.mirror.put(readValue)
+    # home forward state
+    def home_forward_entry(self):
+        self.m2_home_forward.put(1)
+        
+    def home_forward_eval(self):
+        if self.m2_done_moving.rising():
+            self.logI('charge slider in home forward')
+            self.gotoState('home_reverse')
+            
+    def home_forward_exit(self):
+        pass
+
+    # home reverse state
+    def home_reverse_entry(self):
+        self.m2_home_reverse.put(1)
+        
+    def home_reverse_eval(self):
+        if self.m2_done_moving.rising():
+            self.logI('charge slider in home reverse')
+            self.gotoState('home_forward')
+            
+    def home_reverse_exit(self):
+        pass
