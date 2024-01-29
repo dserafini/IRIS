@@ -28,6 +28,7 @@ class chargebuffer_fsm(fsmBase):
         self.m2_home_forward.put(1)
         
     def home_forward_eval(self):
+        self.logI('m2 DMOV: ' + self.m2_done_moving)
         if self.m2_done_moving.rising():
             self.logI('charge slider in home forward')
             self.gotoState('idle')
@@ -40,6 +41,7 @@ class chargebuffer_fsm(fsmBase):
         self.m2_home_reverse.put(1)
         
     def home_reverse_eval(self):
+        self.logI('m2 DMOV: ' + self.m2_done_moving)
         if self.m2_done_moving.rising():
             self.logI('charge slider in home reverse')
             self.gotoState('idle')
