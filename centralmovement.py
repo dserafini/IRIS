@@ -12,7 +12,7 @@ class centralmovement_fsm(fsmBase):
         self.m5_speed = self.connect("WhHrdwMtbx54A_Chan05:Motr.S")
         self.m5_min_velocity = self.connect("WhHrdwMtbx54A_Chan05:Motr.VBAS")
 
-        self.home = self.connect("FeExprIris01A_Proc01:Enab")
+        self.home = self.connect("FeExprIris01A_Proc02:Enab")
 
         self.gotoState('idle')
 
