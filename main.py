@@ -3,7 +3,7 @@ from smlib import loader
 from chargebuffer import chargebuffer_fsm
 # from chargeslider import chargeslider_fsm
 # from topactuator import topactuator_fsm
-# from central import central_fsm
+from centralmovement import centralmovement_fsm
 # from bottomactuator import bottomactuator_fsm
 # from dischargeslider import dischargeslider_fsm
 # from dischargebuffer import dischargebuffer_fsm
@@ -13,7 +13,8 @@ l = loader()
 
 # l.setVerbosity("debug")
 
-l.load(chargebuffer_fsm,"myexampleFsm")
+l.load(chargebuffer_fsm,"chargebuffer_fsm")
+l.load(centralmovement_fsm,"centralmovement_fsm")
 # l.load(chargeslider_fsm,"chargeslider_fsm")
 # l.load(topactuator_fsm,"topactuator_fsm")
 # l.load(central_fsm,"central_fsm")
