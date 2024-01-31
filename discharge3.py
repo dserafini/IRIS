@@ -176,7 +176,7 @@ class discharge3_fsm(fsmBase):
 # s7: Carica e Scarica del "Discharge_Buffer", Motore: m4
   
     def idle_eval(self):
-        if self.state_7 == 1:
+        if self.state_7.rising():
             self.gotoState("Discharge_Buffer_State2")   
 		
     def idle_error_eval(self):
