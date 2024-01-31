@@ -25,48 +25,6 @@ class prepare_fsm(fsmBase):
 
         # Charge Central Movement Correction
         self.relative_correction = 64  # correzione di uno step
-
-        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-
-        # ALIGNMENT " Irradiation_state ": Allineamento Targets con il fascio - - - -
-        self.i3 = 64
-        
-        self.align_d1 = 64
-        self.align_d2 = 134                                                                   # VALORI DA VERIFICARE !!
-        self.align_d3 = 132 
-        # - - - - - - - - - - - - - - - - - - - - - - - -
-
-
-        # Dichiarazione variabili interne - - - - - - - -
-
-        self.e = 0         # Enable / Disableself.i1
-        self.n_restart = 0 # Contegio dei restart per la carica del Charge Buffer
-
-        # Coupling/Decoupling to Beemline
-
-        self.coupling_push_botton = 0
-        self.decoupling_push_botton = 0
-
-        # Controlo stati 
-        
-        self.s1 = 0  # Charge_Slider_state 
-        self.s2 = 0  # Charge_Buffer_state
-        self.s3 = 0  # Charge_Central_state
-        self.s4 = 0  # Irraggiamento_state
-        self.s5 = 0  # Discharge_Slider_state
-        self.s6 = 0  # Discharge_Central_state
-        self.s7 = 0  # Discharge_Buffer_State
-        
-        # Sliders
-        self.l1 = 0
-        self.l2 = 0
-
-        # Irradiation_state: Alignment Targets
-        self.d1 = 0  # 1^ Target
-        self.d2 = 0  # 2^ Target
-        self.d3 = 0  # 3^ Target
-        
-        # - - - - - - - - - - - - - - - - - - - - - - - - - 
         
 ################################################################################
 #          INIZIALIZZAZZIONE MOTORI / PV - LOCKS / PV PROCEDURES
@@ -196,6 +154,7 @@ class prepare_fsm(fsmBase):
 ################################################################################
     def motor_settings_state_entry(self):
         # Iniziallizzazione Variabili interne ai valori di default
+	    # Controlo stati 
         self.s1 = 0
         self.s2 = 0
         #self.s3 = 0                                                                  #Inutilizzato 
@@ -203,12 +162,10 @@ class prepare_fsm(fsmBase):
         self.s5 = 0
         self.s6 = 0
         self.s7 = 0
+	    # Irradiation_state: Alignment Targets
         self.d1 = 0  
         self.d2 = 0  
         self.d3 = 0
-        self.e  = 0  
-        self.coupling_push_botton = 0
-        self.decoupling_push_botton = 0
 # M1
         self.m1_min_velocity.put(1280) 
         self.tmrSet('moveTimeout01', 5)
