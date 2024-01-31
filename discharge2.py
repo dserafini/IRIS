@@ -423,7 +423,7 @@ class discharge2_fsm(fsmBase):
 
     def final_discharge_state_eval(self):
         if self.state_6.putCompleting():                                                                 
-            self.gotoState("idle_state")    
+            self.gotoState("idle")    
  
         elif self.tmrExpiring("moveTimeout31_1"):                                       
             self.state_6.put(4)
