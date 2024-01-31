@@ -19,6 +19,7 @@ l = loader()
 
 l.load(prepare_fsm,"prepare_fsm")
 l.load(charge_fsm,"charge_fsm")
+l.load(irradiation_fsm,"irradiation_fsm")
 l.load(discharge_fsm,"discharge_fsm")
 # l.load(chargebuffer_fsm,"chargebuffer_fsm")
 # l.load(centralmovement_fsm,"centralmovement_fsm")
