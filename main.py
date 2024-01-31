@@ -9,7 +9,9 @@ from chargebuffer import chargebuffer_fsm
 # from topactuator import topactuator_fsm
 from centralmovement import centralmovement_fsm
 # from bottomactuator import bottomactuator_fsm
-from discharge import discharge_fsm
+from discharge1 import discharge1_fsm
+from discharge2 import discharge2_fsm
+from discharge3 import discharge3_fsm
 # from dischargeslider import dischargeslider_fsm
 # from dischargebuffer import dischargebuffer_fsm
 
@@ -22,7 +24,9 @@ l.load(prepare_fsm,"prepare_fsm")
 l.load(homing_fsm,"homing_fsm")
 l.load(charge_fsm,"charge_fsm")
 l.load(irradiation_fsm,"irradiation_fsm")
-l.load(discharge_fsm,"discharge_fsm")
+l.load(discharge1_fsm,"discharge1_fsm")
+l.load(discharge2_fsm,"discharge2_fsm")
+l.load(discharge3_fsm,"discharge3_fsm")
 # l.load(chargebuffer_fsm,"chargebuffer_fsm")
 # l.load(centralmovement_fsm,"centralmovement_fsm")
 # l.load(chargeslider_fsm,"chargeslider_fsm")
