@@ -45,16 +45,6 @@ class homing_fsm(fsmBase):
 
         self.coupling_push_botton = 0
         self.decoupling_push_botton = 0
-
-        # Controlo stati 
-        
-        self.s1 = 0  # Charge_Slider_state 
-        self.s2 = 0  # Charge_Buffer_state
-        self.s3 = 0  # Charge_Central_state
-        self.s4 = 0  # Irraggiamento_state
-        self.s5 = 0  # Discharge_Slider_state
-        self.s6 = 0  # Discharge_Central_state
-        self.s7 = 0  # Discharge_Buffer_State
         
         # Sliders
         self.l1 = 0
@@ -173,6 +163,10 @@ class homing_fsm(fsmBase):
 ################################################################################
 
     def idle_eval(self):
+        if self.state_0.rising():
+            self.gotoState("homing1")
+
+    def idle_error_eval(self):
         pass
 
 # Homing iniziale: solo per la prima esecuzione
@@ -403,12 +397,12 @@ class homing_fsm(fsmBase):
 
   # Fine Homing - Segnalazione nell'interfaccia 
     def homing_finished_entry(self):
-        self.state_0.put(2)
+        self.state_0.put(0)
         self.tmrSet('moveTimeout3_3', 10) 
 
     def homing_finished_eval(self):
         if self.state_0.putCompleting():
-            self.gotoState("idle_state")                 
+            self.gotoState("idle")                 
 
         elif self.tmrExpiring("moveTimeout3_3"):
             self.logI("\tERROR: homing_finished")
