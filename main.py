@@ -6,6 +6,7 @@ from chargebuffer import chargebuffer_fsm
 # from topactuator import topactuator_fsm
 from centralmovement import centralmovement_fsm
 # from bottomactuator import bottomactuator_fsm
+from discharge import discharge_fsm
 # from dischargeslider import dischargeslider_fsm
 # from dischargebuffer import dischargebuffer_fsm
 
