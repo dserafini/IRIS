@@ -2,6 +2,7 @@ from smlib import loader
 
 from prepare import prepare_fsm
 from charge import charge_fsm
+from irradiation import irradiation_fsm
 from chargebuffer import chargebuffer_fsm
 # from chargeslider import chargeslider_fsm
 # from topactuator import topactuator_fsm
