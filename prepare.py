@@ -2,9 +2,9 @@
 import time
 from smlib import fsmBase
 
-class IRIS_FSM(fsmBase):
+class prepare_fsm(fsmBase):
     def __init__(self, name, *args, **kwargs):
-        super(IRIS_FSM, self).__init__(name, **kwargs)
+        super(prepare_fsm, self).__init__(name, **kwargs)
 
         
         # ALIGNMENT - - - - - - - - - - - - - - - - - - - - - - - -
