@@ -174,13 +174,18 @@ class charge_fsm(fsmBase):
 ################################################################################
 
     def idle_eval(self):
+        if self.state_1.rising():
+            self.gotoState(Charge_Slider_state2)
+
+    def idle_error_eval(self):
         pass
+
     
 # s1: Posizionamento dello slider "Charge_Slider" , Motore: m1 
 
 # Segnalazione interfaccia
     def Charge_Slider_state_entry(self):
-        self.state_1.put(1)                                                           # Segnalazione interfaccia                                             
+        # self.state_1.put(1)                                                           # Segnalazione interfaccia                                             
         self.tmrSet('moveTimeout7_1', 10)                                             # Set a timer of 30s
         
     def Charge_Slider_state_eval(self):
