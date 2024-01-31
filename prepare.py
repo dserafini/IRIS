@@ -527,5 +527,5 @@ class prepare_fsm(fsmBase):
             self.logI("\t... ERRORE: interface_state_7 ...")
             self.gotoState("idle_error")
 
-    def idle_eval:
+    def idle_eval(self):
 	pass
