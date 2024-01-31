@@ -1,5 +1,6 @@
 from smlib import loader
 
+from prepare import prepare_fsm
 from charge import charge_fsm
 from chargebuffer import chargebuffer_fsm
 # from chargeslider import chargeslider_fsm
@@ -15,6 +16,7 @@ l = loader()
 
 # l.setVerbosity("debug")
 
+l.load(prepare_fsm,"prepare_fsm")
 l.load(charge_fsm,"charge_fsm")
 l.load(discharge_fsm,"discharge_fsm")
 # l.load(chargebuffer_fsm,"chargebuffer_fsm")
