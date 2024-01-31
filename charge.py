@@ -594,7 +594,7 @@ class charge_fsm(fsmBase):
             self.logI("\t >  - - - Iris is ready for the vacuum - - - <")
             # self.s2 = 1 # Fine stato di carica
             self.state_1.put(0) 
-            self.gotoState("idle_state")   
+            self.gotoState("idle")   
 
         elif self.tmrExpiring("moveTimeout18_1"):                                      
             self.state_2.put(4)
