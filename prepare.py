@@ -522,7 +522,10 @@ class prepare_fsm(fsmBase):
     def interface_state_7_eval(self):
         if self.state_7.putCompleting():
             self.logI("\tAll PV and Motor Inizialized ... ")
-            self.gotoState("homing")
+            self.gotoState("idle")
         elif self.tmrExpiring("moveTimeout020"):                                    
             self.logI("\t... ERRORE: interface_state_7 ...")
-            self.gotoState("idle_error") 
+            self.gotoState("idle_error")
+
+    def idle_eval:
+	pass
