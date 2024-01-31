@@ -1,6 +1,7 @@
 from smlib import loader
 
 from prepare import prepare_fsm
+from homing import homing_fsm
 from charge import charge_fsm
 from irradiation import irradiation_fsm
 from chargebuffer import chargebuffer_fsm
@@ -18,6 +19,7 @@ l = loader()
 # l.setVerbosity("debug")
 
 l.load(prepare_fsm,"prepare_fsm")
+l.load(homing_fsm,"homing_fsm")
 l.load(charge_fsm,"charge_fsm")
 l.load(irradiation_fsm,"irradiation_fsm")
 l.load(discharge_fsm,"discharge_fsm")
