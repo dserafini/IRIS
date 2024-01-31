@@ -209,7 +209,7 @@ class charge_fsm(fsmBase):
     def Charge_Slider_state2_eval(self):
         if self.m1_absolute.putCompleting():            
             self.logI("\t> - Charge Slider out - <")
-            self.gotoState("idle_state")                                            # Torna nello stato principale: "idle_state"
+            self.gotoState("Charge_Central_state")                                            # Torna nello stato principale: "idle_state"
 
         elif self.tmrExpiring("moveTimeout7"):                                      # Timer expired event
             self.logI("\n<  - - - !! ERROR: Charge_Slider movement - - -  >\n")
