@@ -173,7 +173,7 @@ class discharge1_fsm(fsmBase):
 #                           Discharge_Slider_state                                       
 ################################################################################    
     def idle_eval(self):
-        if self.state_5 == 1:
+        if self.state_5.rising():
             self.gotoState("Decoupling_state")   
 		
     def idle_error_eval(self):
