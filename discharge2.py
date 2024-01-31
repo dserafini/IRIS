@@ -176,7 +176,7 @@ class discharge2_fsm(fsmBase):
 # s6 : Carica "Central Movement", Motore: m5 , Attuatore: "lock1" 
   
     def idle_eval(self):
-        if self.state_6 == 1:
+        if self.state_6.rising():
             self.gotoState("Extract_lock1_1")   
 		
     def idle_error_eval(self):
