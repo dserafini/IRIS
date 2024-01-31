@@ -175,7 +175,7 @@ class charge_fsm(fsmBase):
 
     def idle_eval(self):
         if self.state_1.rising():
-            self.gotoState(Charge_Slider_state2)
+            self.gotoState("Charge_Slider_state2")
 
     def idle_error_eval(self):
         pass
