@@ -16,6 +16,7 @@ l = loader()
 # l.setVerbosity("debug")
 
 l.load(charge_fsm,"charge_fsm")
+l.load(discharge_fsm,"discharge_fsm")
 # l.load(chargebuffer_fsm,"chargebuffer_fsm")
 # l.load(centralmovement_fsm,"centralmovement_fsm")
 # l.load(chargeslider_fsm,"chargeslider_fsm")
