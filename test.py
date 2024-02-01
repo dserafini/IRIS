@@ -16,6 +16,9 @@ class exampleFsm(fsmBase):
         self.gotoState('idle')
 
     # idle state
+    def idle_entry(self):
+        self.logI("idling")
+        
     def idle_eval(self):
         if self.var16.rising():
             self.var16.put(0)
@@ -27,6 +30,7 @@ class exampleFsm(fsmBase):
         
     def mirroring_eval(self):
         if self.var17.putCompleting():
+            self.logI("var17 is " + self.var17.val(as_string=True))
             self.gotoState("idle")
 
 # Main
