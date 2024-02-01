@@ -10,20 +10,24 @@ class exampleFsm(fsmBase):
         self.mirror = self.connect("testmirror")
         self.enable = self.connect("testenable")
 
+        self.var16 = self.connect("FeExprIris01A_Proc17:Enab")
+        self.var17 = self.connect("FeExprIris01A_Proc17:Enab")
+
         self.gotoState('idle')
 
     # idle state
     def idle_eval(self):
-        if self.enable.rising():
+        if self.var16.rising():
+            self.var16.put(0)
             self.gotoState("mirroring")
 
     # mirroring state
+    def mirroring_entry(self):
+        self.var17.put(2)
+        
     def mirroring_eval(self):
-        if self.enable.falling():
+        if self.var17.putCompleting():
             self.gotoState("idle")
-        elif self.counter.changing():
-            readValue = self.counter.val()
-            self.mirror.put(readValue)
 
 # Main
 if __name__ == '__main__':
