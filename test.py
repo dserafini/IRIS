@@ -10,7 +10,7 @@ class exampleFsm(fsmBase):
         self.mirror = self.connect("testmirror")
         self.enable = self.connect("testenable")
 
-        self.var16 = self.connect("FeExprIris01A_Proc17:Enab")
+        self.var16 = self.connect("FeExprIris01A_Proc16:Enab")
         self.var17 = self.connect("FeExprIris01A_Proc17:Enab")
 
         self.gotoState('idle')
