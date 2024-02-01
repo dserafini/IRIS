@@ -27,7 +27,7 @@ class exampleFsm(fsmBase):
 
     # mirroring state
     def mirroring_entry(self):
-        self.var17.put(2)
+        self.var17.put(self.var17.val() + 1)
         
     def mirroring_eval(self):
         if self.var17.putCompleting():
