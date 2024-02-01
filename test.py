@@ -18,6 +18,7 @@ class exampleFsm(fsmBase):
     # idle state
     def idle_entry(self):
         self.logI("idling")
+        self.var16.put(0)
         
     def idle_eval(self):
         if self.var16.rising():
