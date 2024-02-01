@@ -21,13 +21,14 @@ class exampleFsm(fsmBase):
         self.var16.put(0)
         
     def idle_eval(self):
-        if self.var16.rising():
-            self.var16.put(0)
-            self.gotoState("mirroring")
+        #if self.var16.rising():
+         #   self.var16.put(0)
+        self.v1 = input("var17 should be ")
+        self.gotoState("mirroring")
 
     # mirroring state
     def mirroring_entry(self):
-        self.var17.put(self.var17.val() + 1)
+        self.var17.put(self.v1)
         
     def mirroring_eval(self):
         if self.var17.putCompleting():
