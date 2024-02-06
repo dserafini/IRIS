@@ -11,7 +11,7 @@ class exampleFsm(fsmBase):
         self.enable = self.connect("testenable")
 
         self.var16 = self.connect("FeExprIris01A_Proc16:Enab")
-        self.var17 = self.connect("FeExprIris01A_Proc17:Enab")
+        self.var17 = self.connect("FeExprIris01A_Moto01:Poin")
 
         self.gotoState('idle')
 
