@@ -121,6 +121,7 @@ class prepare_fsm(fsmBase):
         self.state_5 = self.connect("FeExprIris01A_Proc12:Enab")
         self.state_6 = self.connect("FeExprIris01A_Proc13:Enab")
         self.state_7 = self.connect("FeExprIris01A_Proc14:Enab")
+        self.state_8 = self.connect("FeExprIris01A_Proc15:Enab")
 
 
         
@@ -132,6 +133,13 @@ class prepare_fsm(fsmBase):
 ################################################################################
 #                               CONNECTION PV'S
 ################################################################################
+
+    def idle_eval(self):
+        if self.state_8.rising():
+            self.gotoState("check_connections")
+
+    def idle_error_eval(self):
+        pass
 
     def check_connections_entry(self):
         self.logI("\tChecking PVs connections...")
@@ -489,16 +497,16 @@ class prepare_fsm(fsmBase):
 
     def interface_state_7_entry(self):
 # state_7
-        self.state_7.put(self.s7) 
+        self.state_7.put(self.s7)
+        self.state_8.put(0)
         self.tmrSet('moveTimeout020', 5)
 
     def interface_state_7_eval(self):
-        if self.state_7.putCompleting():
+        if self.state_7.putCompleting() and
+           self.state_8.putCompleting():
             self.logI("\tAll PV and Motor Inizialized ... ")
             self.gotoState("idle")
         elif self.tmrExpiring("moveTimeout020"):                                    
             self.logI("\t... ERRORE: interface_state_7 ...")
             self.gotoState("idle_error")
-
-    def idle_eval(self):
-        pass
+		
