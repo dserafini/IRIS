@@ -502,7 +502,7 @@ class prepare_fsm(fsmBase):
         self.tmrSet('moveTimeout020', 5)
 
     def interface_state_7_eval(self):
-        if self.state_7.putCompleting() and
+        if self.state_7.putCompleting() and \
            self.state_8.putCompleting():
             self.logI("\tAll PV and Motor Inizialized ... ")
             self.gotoState("idle")
