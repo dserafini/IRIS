@@ -14,9 +14,9 @@ class prepare_fsm(fsmBase):
         self.exact_longitudinal_axis_steps = 128
 
         # Charge_Central_Movement position
-        self.exact_1_charge_central_steps = 8064  # 7872
-        self.exact_2_charge_central_steps = 16704 # 16640
-        self.exact_3_charge_central_steps = 24960 
+        self.exact_1_charge_central_steps = self.connect("FeExprIris01A_Moto02:Poin")   # 7872
+        self.exact_2_charge_central_steps = self.connect("FeExprIris01A_Moto03:Poin") # 16640
+        self.exact_3_charge_central_steps = self.connect("FeExprIris01A_Moto04:Poin") 
 
         # Discharge Central Movement position
         self.exact_1_discharge_central_steps = 4096
@@ -280,6 +280,22 @@ class prepare_fsm(fsmBase):
 
     def motor_settings_state_m5_1_eval(self):
         if self.m5_speed.putCompleting():
+            self.gotoState("motor_settings_state_m5_2")
+        elif self.tmrExpiring("moveTimeout05_2"):                                    
+            self.logI("\t... ERRORE: motor_settings_state ...")
+            self.gotoState("idle_error") 
+		
+
+    def motor_settings_state_m5_2_entry(self):
+# M5
+        self.exact_1_charge_central_steps.put(8064)  # 7872
+        self.exact_2_charge_central_steps.put(16704) # 16640
+        self.exact_3_charge_central_steps.put(24960) 
+
+    def motor_settings_state_m5_2_eval(self):
+        if self.exact_1_charge_central_steps.putCompleting() and
+	   self.exact_2_charge_central_steps.putCompleting() and
+	   self.exact_3_charge_central_steps.putCompleting():
             self.gotoState("motor_settings_state_m6")
         elif self.tmrExpiring("moveTimeout05_2"):                                    
             self.logI("\t... ERRORE: motor_settings_state ...")
