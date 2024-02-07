@@ -302,8 +302,8 @@ class prepare_fsm(fsmBase):
 
     def motor_settings_state_m5_2_eval(self):
         if self.exact_1_charge_central_steps.putCompleting() and
-	   self.exact_2_charge_central_steps.putCompleting() and
-	   self.exact_3_charge_central_steps.putCompleting():
+           self.exact_2_charge_central_steps.putCompleting() and
+           self.exact_3_charge_central_steps.putCompleting():
             self.gotoState("motor_settings_state_m6")
         elif self.tmrExpiring("moveTimeout05_2"):                                    
             self.logI("\t... ERRORE: motor_settings_state ...")
